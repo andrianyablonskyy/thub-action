@@ -13,7 +13,23 @@
 
 'use strict';
 
-const AGENT_PACKAGE = '@andrian.yablonskyy/thub-agent';
+// The Agent isn't on npm: npx runs it from its public git repository, at a
+// release tag (`latest`: the newest vX.Y.Z tag).
+const AGENT_REPOSITORY = 'git+https://github.com/andrianyablonskyy/thub-agent.git';
+
+// `agent-version` → the git ref npx installs: `latest` → `semver:*`, `1.2.3`
+// or `v1.2.3` → `v1.2.3`; anything else is refused.
+function agentRef(version){
+  const v = String(version || 'latest').trim();
+  if (v === 'latest'){
+    return 'semver:*';
+  }
+  const m = /^v?(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)$/.exec(v);
+  if (!m){
+    throw new Error(`agent-version must be "latest" or a version like 1.2.3, got "${v}"`);
+  }
+  return `v${m[1]}`;
+}
 
 // action.yml hands every input over as INPUT_<NAME> (upper case, `-` kept).
 function getInput(name, env = process.env){
@@ -108,8 +124,8 @@ function githubMeta(env = process.env, event = {}){
   return Object.entries(meta).filter(([, v]) => v).map(([k, v]) => `${k}=${v}`);
 }
 
-// The command that runs `thub run … --wait --json`: the published Agent
-// through npx, or `agent` (e.g. a thub already installed on the runner).
+// The command that runs `thub run … --wait --json`: the Agent from its git
+// repository through npx, or `agent` (e.g. a thub already installed on the runner).
 function agentCommand(inputs, meta = []){
   const run = ['run', '--type', inputs.type, '--command', inputs.command, '--wait', '--json'],
     add = (flag, values) => {
@@ -140,7 +156,7 @@ function agentCommand(inputs, meta = []){
     const [cmd, ...pre] = inputs.agent.split(/\s+/);
     return { cmd, args: [...pre, ...run] };
   }
-  return { cmd: 'npx', args: ['-y', `${AGENT_PACKAGE}@${inputs.agentVersion}`, ...run] };
+  return { cmd: 'npx', args: ['-y', `--package=${AGENT_REPOSITORY}#${agentRef(inputs.agentVersion)}`, 'thub', ...run] };
 }
 
-module.exports = { getInput, getBool, getList, readInputs, githubMeta, agentCommand, AGENT_PACKAGE };
+module.exports = { getInput, getBool, getList, readInputs, githubMeta, agentCommand, agentRef, AGENT_REPOSITORY };

@@ -85,10 +85,10 @@ inputs:
     description: Token for the PR comment and commit status.
     default: ${{ github.token }}
   agent-version:
-    description: The thub-agent version to run (npm). Pin it for reproducible pipelines.
+    description: The thub-agent release to run ("latest", or a version like 1.2.3), from its git repository. Pin it for reproducible pipelines.
     default: latest
   agent:
-    description: Use this command instead of npx thub-agent, e.g. "thub" when it's installed on a self-hosted runner.
+    description: Use this command instead of running the Agent with npx, e.g. "thub" when it's installed on a self-hosted runner.
     default: ''
   setup-node:
     description: Install Node.js 24 first (actions/setup-node). false when the runner already has Node.js 24.

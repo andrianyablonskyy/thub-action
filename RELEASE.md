@@ -2,6 +2,14 @@
 
 What changed in each release, newest first. `## Unreleased` collects the changes since the last release tag (`vX.Y.Z`, with the moving major tag `v1`). Use its section as the text of the GitHub release (README, *Publishing (maintainers)*).
 
+## Unreleased
+
+Changes since 1.0.0.
+
+### Changed
+
+- **The Agent runs from its git repository**, not npm: `npx -y --package=git+https://github.com/andrianyablonskyy/thub-agent.git#<ref> thub …`. `agent-version: latest` means its newest release tag; a version like `1.1.11` means that release's tag. Anything else is refused.
+
 ## 1.0.0 — 2026-10-08
 
 The first release, `v1.0.0`.

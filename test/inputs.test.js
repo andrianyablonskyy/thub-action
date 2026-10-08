@@ -43,7 +43,7 @@ test('the Agent command: npx by default, every input as its option, GitHub metad
     }),
     { cmd, args } = agentCommand(inputs, ['githubRun=https://github.com/o/r/actions/runs/1', 'githubRef=main']);
   assert.equal(cmd, 'npx');
-  assert.deepEqual(args.slice(0, 3), ['-y', '@andrian.yablonskyy/thub-agent@1.1.6', 'run']);
+  assert.deepEqual(args.slice(0, 4), ['-y', '--package=git+https://github.com/andrianyablonskyy/thub-agent.git#v1.1.6', 'thub', 'run']);
   const pairs = (flag) => args.flatMap((a, i) => (a === flag ? [args[i + 1]] : []));
   assert.deepEqual(pairs('--label'), ['board:nucleo-f401re', 'uart', 'stlink']);
   assert.deepEqual(pairs('--download-file'), ['https://art/app.bin', 'https://art/tests.tgz']);
@@ -70,4 +70,13 @@ test('action.yml hands every input it declares to the script', () => {
     assert.equal(envName.toLowerCase(), input);
   }
   assert.deepEqual(declared.filter((i) => i !== 'setup-node').sort(), mapped.map((m) => m[2]).sort());
+});
+
+test('agent-version: latest is the newest release tag, a version its tag; anything else refused', () => {
+  const { agentRef } = require('../src/inputs');
+  assert.equal(agentRef('latest'), 'semver:*');
+  assert.equal(agentRef(''), 'semver:*');
+  assert.equal(agentRef('1.1.11'), 'v1.1.11');
+  assert.equal(agentRef('v1.1.11'), 'v1.1.11');
+  assert.throws(() => agentRef('main; rm -rf /'), /agent-version must be/);
 });
