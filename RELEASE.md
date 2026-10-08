@@ -2,7 +2,7 @@
 
 What changed in each release, newest first. `## Unreleased` collects the changes since the last release tag (`vX.Y.Z`, with the moving major tag `v1`). Use its section as the text of the GitHub release (README, *Publishing (maintainers)*).
 
-## Unreleased
+## 1.0.0 — 2026-10-08
 
 The first release, `v1.0.0`.
 
