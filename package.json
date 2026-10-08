@@ -1,0 +1,23 @@
+{
+  "name": "@andrian.yablonskyy/thub-action",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GitHub Action: run a TestHub job on lab hardware or an emulator, with a test report in the Job Summary and the pull request",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "author": "Andrian Yablonskyy <andrian.yablonskyy@gmail.com>",
+  "main": "src/main.js",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.11.0",
+    "eslint-plugin-promise": "^7.3.0",
+    "globals": "^17.12.0"
+  }
+}

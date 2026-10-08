@@ -1,0 +1,171 @@
+name: TestHub Run
+description: Run a test job on real lab hardware or an emulator through TestHub, with a test report in the Job Summary and the pull request.
+author: Andrian Yablonskyy
+branding:
+  icon: cpu
+  color: blue
+
+inputs:
+  url:
+    description: The Coordinator's address, e.g. https://thub.example.com.
+    required: true
+  key:
+    description: A CI token (dashboard → CI tokens) or a user's access key. Pass it from a secret.
+    required: true
+  type:
+    description: 'The Client type the job needs: hw or sw.'
+    required: true
+  command:
+    description: The job's entry point, run with sh -c in its work directory on the Client. Its exit code is the verdict.
+    required: true
+  labels:
+    description: Labels the Client must have, one per line or comma-separated (e.g. board:nucleo-f401re).
+    default: ''
+  client:
+    description: Run on this Client only (name or id).
+    default: ''
+  download-files:
+    description: URLs the Client downloads before the command, one per line ($THUB_DOWNLOAD_1, …).
+    default: ''
+  env:
+    description: Environment variables for the command, one per line, NAME=value or NAME alone (its value from this step's env:). Values are secrets to TestHub.
+    default: ''
+  args:
+    description: Arguments for the command, one per line ("$@").
+    default: ''
+  suite:
+    description: Test suite name, passed to the command as JOB_SUITE.
+    default: ''
+  timeout:
+    description: The job's timeout, e.g. 30m or 1h.
+    default: ''
+  priority:
+    description: Priority, 0-100.
+    default: ''
+  meta:
+    description: Extra key=value metadata for the job, one per line. The run's URL, repository, commit, ref and PR are added for you.
+    default: ''
+  dry-run:
+    description: Schedule the job but only log what the Client would run.
+    default: 'false'
+  power-on-start:
+    description: 'USB power (uhubctl) before the job, HW only: on, off or reset.'
+    default: ''
+  power-on-end:
+    description: 'USB power when the job ends, HW only: on, off or reset.'
+    default: ''
+  power-reset-delay:
+    description: Seconds a reset keeps the power off (default 1).
+    default: ''
+  name:
+    description: A short title for this run in the summary and the PR comment, e.g. "HW smoke (nucleo-f401re)".
+    default: ''
+  fail:
+    description: 'Fail the step unless the job PASSED. false: report only, and read the verdict from the outputs.'
+    default: 'true'
+  summary:
+    description: Write the report to the Job Summary.
+    default: 'true'
+  comment:
+    description: "Comment on the pull request: true (always, updated in place), on-failure (only when it didn't pass; a later pass updates it), or false."
+    default: 'true'
+  comment-key:
+    description: "Identifies this run's comment, so each matrix entry gets its own. Default: the workflow, job and name."
+    default: ''
+  pr-number:
+    description: The pull request to comment on, when the event isn't a pull_request (e.g. workflow_run).
+    default: ''
+  commit-status:
+    description: 'Also set a commit status that links to the TestHub job (needs permissions: statuses: write).'
+    default: 'false'
+  artifact-headers:
+    description: 'HTTP headers for fetching the JUnit XML the job lists in $THUB_ARTIFACTS_FILE, one "Name: value" per line.'
+    default: ''
+  github-token:
+    description: Token for the PR comment and commit status.
+    default: ${{ github.token }}
+  agent-version:
+    description: The thub-agent version to run (npm). Pin it for reproducible pipelines.
+    default: latest
+  agent:
+    description: Use this command instead of npx thub-agent, e.g. "thub" when it's installed on a self-hosted runner.
+    default: ''
+  setup-node:
+    description: Install Node.js 24 first (actions/setup-node). false when the runner already has Node.js 24.
+    default: 'true'
+
+outputs:
+  job-id:
+    description: The TestHub job id, e.g. A-00042.
+    value: ${{ steps.run.outputs.job-id }}
+  job-url:
+    description: The job's page on the dashboard (log, timeline, artifacts).
+    value: ${{ steps.run.outputs.job-url }}
+  state:
+    description: PASSED, FAILED, ERROR, TIMEOUT, LOST or CANCELED.
+    value: ${{ steps.run.outputs.state }}
+  exit-code:
+    description: The command's exit code.
+    value: ${{ steps.run.outputs.exit-code }}
+  client:
+    description: The Client that ran the job.
+    value: ${{ steps.run.outputs.client }}
+  board:
+    description: The board:<name> label the job asked for, if any.
+    value: ${{ steps.run.outputs.board }}
+  duration-sec:
+    description: How long the job ran, in seconds.
+    value: ${{ steps.run.outputs.duration-sec }}
+  total:
+    description: JUnit tests in total.
+    value: ${{ steps.run.outputs.total }}
+  passed:
+    description: JUnit tests passed.
+    value: ${{ steps.run.outputs.passed }}
+  failed:
+    description: JUnit tests failed.
+    value: ${{ steps.run.outputs.failed }}
+  skipped:
+    description: JUnit tests skipped.
+    value: ${{ steps.run.outputs.skipped }}
+
+runs:
+  using: composite
+  steps:
+    - if: inputs.setup-node == 'true'
+      uses: actions/setup-node@v4
+      with:
+        node-version: 24
+
+    - id: run
+      shell: bash
+      run: node "$GITHUB_ACTION_PATH/src/main.js"
+      env:
+        INPUT_URL: ${{ inputs.url }}
+        INPUT_KEY: ${{ inputs.key }}
+        INPUT_TYPE: ${{ inputs.type }}
+        INPUT_COMMAND: ${{ inputs.command }}
+        INPUT_LABELS: ${{ inputs.labels }}
+        INPUT_CLIENT: ${{ inputs.client }}
+        INPUT_DOWNLOAD-FILES: ${{ inputs.download-files }}
+        INPUT_ENV: ${{ inputs.env }}
+        INPUT_ARGS: ${{ inputs.args }}
+        INPUT_SUITE: ${{ inputs.suite }}
+        INPUT_TIMEOUT: ${{ inputs.timeout }}
+        INPUT_PRIORITY: ${{ inputs.priority }}
+        INPUT_META: ${{ inputs.meta }}
+        INPUT_DRY-RUN: ${{ inputs.dry-run }}
+        INPUT_POWER-ON-START: ${{ inputs.power-on-start }}
+        INPUT_POWER-ON-END: ${{ inputs.power-on-end }}
+        INPUT_POWER-RESET-DELAY: ${{ inputs.power-reset-delay }}
+        INPUT_NAME: ${{ inputs.name }}
+        INPUT_FAIL: ${{ inputs.fail }}
+        INPUT_SUMMARY: ${{ inputs.summary }}
+        INPUT_COMMENT: ${{ inputs.comment }}
+        INPUT_COMMENT-KEY: ${{ inputs.comment-key }}
+        INPUT_PR-NUMBER: ${{ inputs.pr-number }}
+        INPUT_COMMIT-STATUS: ${{ inputs.commit-status }}
+        INPUT_ARTIFACT-HEADERS: ${{ inputs.artifact-headers }}
+        INPUT_GITHUB-TOKEN: ${{ inputs.github-token }}
+        INPUT_AGENT-VERSION: ${{ inputs.agent-version }}
+        INPUT_AGENT: ${{ inputs.agent }}
