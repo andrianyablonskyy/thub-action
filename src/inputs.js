@@ -1,5 +1,5 @@
 /**
- * @file        packages/action/src/inputs.js
+ * @file        action/src/inputs.js
  * @description The action's inputs, and the `thub run` command line they become
  *
  * @author      Andrian Yablonskyy

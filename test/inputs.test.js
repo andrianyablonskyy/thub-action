@@ -1,5 +1,5 @@
 /**
- * @file        packages/action/test/inputs.test.js
+ * @file        action/test/inputs.test.js
  * @description Tests: the action's inputs, and the thub run command line they become
  *
  * @author      Andrian Yablonskyy

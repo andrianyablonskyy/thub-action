@@ -1,5 +1,5 @@
 /**
- * @file        packages/action/test/report.test.js
+ * @file        action/test/report.test.js
  * @description Tests: the Job Summary, the PR comment and JUnit parsing
  *
  * @author      Andrian Yablonskyy
@@ -96,7 +96,7 @@ test('commit status per verdict', () => {
 // The action has no dependencies, so it carries a copy of thub-common's
 // renderer: in the monorepo, the two must stay the same (bar the header).
 test('src/report.js is thub-common\'s src/report-markdown.js', (t) => {
-  const shared = path.join(__dirname, '..', '..', 'shared', 'src', 'report-markdown.js');
+  const shared = path.join(__dirname, '..', '..', 'packages', 'shared', 'src', 'report-markdown.js');
   if (!fs.existsSync(shared)){
     t.skip('not in the monorepo');
     return;
@@ -105,5 +105,5 @@ test('src/report.js is thub-common\'s src/report-markdown.js', (t) => {
     const s = fs.readFileSync(file, 'utf8'); return s.slice(s.indexOf('\'use strict\';'));
   };
   assert.equal(body(path.join(__dirname, '..', 'src', 'report.js')), body(shared),
-    'copy packages/shared/src/report-markdown.js (below its header) into packages/action/src/report.js');
+    'copy packages/shared/src/report-markdown.js (below its header) into action/src/report.js');
 });

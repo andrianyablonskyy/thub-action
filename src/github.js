@@ -1,5 +1,5 @@
 /**
- * @file        packages/action/src/github.js
+ * @file        action/src/github.js
  * @description The GitHub side: step outputs, the Job Summary, the sticky pull-request comment and the commit status
  *
  * @author      Andrian Yablonskyy

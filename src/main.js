@@ -1,5 +1,5 @@
 /**
- * @file        packages/action/src/main.js
+ * @file        action/src/main.js
  * @description GitHub Action entry point: runs `thub run --wait`, then reports the job on GitHub — outputs, the Job
  *              Summary, a pull-request comment and, optionally, a commit status
  *

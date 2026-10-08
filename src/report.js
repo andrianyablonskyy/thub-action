@@ -1,5 +1,5 @@
 /**
- * @file        packages/action/src/report.js
+ * @file        action/src/report.js
  * @description A copy of thub-common's src/report-markdown.js (the action has no dependencies): the pull-request
  *              comment, the Job Summary and the JUnit test table. Edit it there; test/report.test.js checks they match
  *

@@ -1,5 +1,5 @@
 /**
- * @file        packages/action/test/main.test.js
+ * @file        action/test/main.test.js
  * @description Tests: end to end — a fake Agent, Coordinator and GitHub API: outputs, Job Summary, PR comment, commit status
  *
  * @author      Andrian Yablonskyy
