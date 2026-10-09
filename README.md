@@ -185,7 +185,7 @@ The Coordinator keeps the JUnit **counts** the Client read from `results/` or `a
           commit-status: true
 ```
 
-**A self-hosted runner** that already has Node.js 24 and the Agent (`npm i -g --install-links git+https://github.com/andrianyablonskyy/thub-agent.git`): no download on every run.
+**A self-hosted runner** that already has Node.js 24 and the Agent (`npm i -g @andrian.yablonskyy/thub-agent`): no download on every run.
 
 ```yaml
     runs-on: [self-hosted, linux]
