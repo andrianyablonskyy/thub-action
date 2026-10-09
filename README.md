@@ -1,6 +1,6 @@
 # TestHub Run — GitHub Action
 
-Run a test job on real lab hardware (or an emulator) through [TestHub](https://github.com/andrianyablonskyy/thub-coordinator), straight from a workflow:
+Run a test job on real lab hardware (or an emulator) through TestHub, straight from a workflow. It talks to your TestHub [Coordinator](https://github.com/users/andrianyablonskyy/packages/container/package/thub-coordinator), which runs from its Docker image (`ghcr.io/andrianyablonskyy/thub-coordinator`):
 
 - **One step instead of `npx … thub run`.** The job's log streams into the step, and the step passes or fails with the job.
 - **A Job Summary** with the verdict, board, Client, duration, test counts, every test case and the artifacts.
