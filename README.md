@@ -227,7 +227,7 @@ Canceling the workflow (or a newer push with `concurrency: cancel-in-progress`) 
 The action lives in its own public repository (`andrianyablonskyy/thub-action`), with `action.yml` at the root. This directory is that repository's content.
 
 1. Create the repository and push this directory's content to it. Its `.github/workflows/test.yml` runs the tests on every push.
-2. Release: `git tag -a v1.0.0 -m v1.0.0 && git tag -fa v1 -m v1 && git push origin v1.0.0 && git push -f origin v1`. Workflows use the moving major tag `@v1`; move it on every compatible release.
+2. Release: `bin/publish` in the TestHub repository does it with the other packages: it bumps the version, pushes the `vX.Y.Z` tag and moves the major tag `v1` to it (workflows use `@v1`). It also releases the Action whenever thub-common is released, after syncing `src/report.js` (a copy of thub-common's `src/report-markdown.js`) from it.
 3. **GitHub Marketplace:** open the repository's **Releases → Draft a new release** for the tag, tick **Publish this Action to the GitHub Marketplace**, and accept the agreement (once per account; it requires 2FA). Pick the categories *Continuous integration* and *Testing*. The `name` in `action.yml` must be unique on the Marketplace; `branding` sets its icon.
 
 ## License
