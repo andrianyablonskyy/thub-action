@@ -2,6 +2,12 @@
 
 What changed in each release, newest first. `## Unreleased` collects the changes since the last release tag (`vX.Y.Z`, with the moving major tag `v1`). Use its section as the text of the GitHub release (README, *Publishing (maintainers)*).
 
+## 1.0.4 — 2026-10-15
+
+### Changed
+
+- The report (pull-request comment, Job Summary) as in thub-common 2.2.3.
+
 ## 1.0.3 — 2026-10-14
 
 ### Changed
